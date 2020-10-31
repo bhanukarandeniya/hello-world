@@ -1,0 +1,22 @@
+---
+- hosts: all
+  become: true
+  tasks:
+
+  - name: stop exisiting container
+    command: docker stop simple-devops-container
+    ignore_errors: yes
+
+  - name: remove exisiting container
+    command: docker rm simple-devops-container
+    ignore_errors: yes
+            
+  - name: remove docker images before new build
+    command: docker rmi bhanukarandeniya/simple-devops-image:latest
+    ignore_errors: yes
+
+  - name: pull docker image from the repo
+    command: docker pull bhanukarandeniya/simple-devops-image:latest
+
+  - name: run docker image
+    command: docker run -d --name simple-devops-container -p 8080:8080 bhanukarandeniya/simple-devops-image:latest
